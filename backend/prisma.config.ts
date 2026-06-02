@@ -7,6 +7,9 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
 
+console.log('NODE_ENV =', process.env.NODE_ENV);
+console.log('DATABASE_URL exists =', !!process.env.DATABASE_URL);
+
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   migrations: {
