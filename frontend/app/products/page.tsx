@@ -1,7 +1,10 @@
+import ProductForm from "@/features/product/ProductForm";
+
+
 export default function ProductsPage() {
   return (
     <main>
-      <h1>Products</h1>
+      <ProductForm />
     </main>
   );
 }
