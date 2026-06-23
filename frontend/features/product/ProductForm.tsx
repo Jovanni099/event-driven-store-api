@@ -4,27 +4,33 @@ import styles from './ProductForm.module.scss';
 
 export default function ProductForm() {
   return (
-    <div className={styles.form}>
-      <h2 className={styles.title}>Создание товара</h2>
+    <form className={styles.form}>
+      <h2>Создание товара</h2>
 
-      <input
-        className={styles.input}
-        placeholder="Название товара"
-      />
+      <input placeholder="Название товара" />
 
-      <input
-        className={styles.input}
-        placeholder="Slug"
-      />
+      <input placeholder="Slug" />
 
-      <input
-        className={styles.input}
-        placeholder="Цена"
-      />
+      <textarea placeholder="Описание" />
 
-      <button className={styles.button}>
+      <input placeholder="URL изображения" />
+
+      <input type="number" placeholder="Цена" />
+
+      <input type="number" placeholder="Количество" />
+
+      <input placeholder="SKU" />
+
+      <select>
+        <option value="DRAFT">Черновик</option>
+        <option value="ACTIVE">Активен</option>
+        <option value="OUT_OF_STOCK">Нет в наличии</option>
+        <option value="ARCHIVED">Архив</option>
+      </select>
+
+      <button type="submit">
         Создать товар
       </button>
-    </div>
+    </form>
   );
 }
