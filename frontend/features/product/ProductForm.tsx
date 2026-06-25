@@ -1,34 +1,60 @@
 'use client';
 
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import styles from './ProductForm.module.scss';
 
+import {
+  productSchema,
+  ProductFormData,
+} from './product.schema';
+
 export default function ProductForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+
+    defaultValues: {
+      status: 'DRAFT',
+      stock: 0,
+    },
+  });
+
+  const onSubmit = async (
+    data: ProductFormData,
+  ) => {
+    console.log(data);
+  };
+
   return (
-    <form className={styles.form}>
-      <h2>Создание товара</h2>
+    <form
+      className={styles.form}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <h2 className={styles.title}>
+        Создание товара
+      </h2>
 
-      <input placeholder="Название товара" />
+      <input
+        className={styles.input}
+        placeholder="Название товара"
+        {...register('name')}
+      />
 
-      <input placeholder="Slug" />
+      {errors.name && (
+        <p className={styles.error}>
+          {errors.name.message}
+        </p>
+      )}
 
-      <textarea placeholder="Описание" />
-
-      <input placeholder="URL изображения" />
-
-      <input type="number" placeholder="Цена" />
-
-      <input type="number" placeholder="Количество" />
-
-      <input placeholder="SKU" />
-
-      <select>
-        <option value="DRAFT">Черновик</option>
-        <option value="ACTIVE">Активен</option>
-        <option value="OUT_OF_STOCK">Нет в наличии</option>
-        <option value="ARCHIVED">Архив</option>
-      </select>
-
-      <button type="submit">
+      <button
+        type="submit"
+        className={styles.button}
+      >
         Создать товар
       </button>
     </form>

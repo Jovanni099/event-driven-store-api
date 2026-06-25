@@ -1,4 +1,4 @@
-export type ProductStatus = "DRAFT" | "ACTIVE";
+export type ProductStatus = "DRAFT" | "ACTIVE" | "OUT_OF_STOCK" | "ARCHIVED";
 
 export interface CreateProductDto {
   name: string;
