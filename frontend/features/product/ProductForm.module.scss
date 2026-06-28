@@ -1,119 +1,245 @@
-@use '@/styles/variables' as *;
-@use '@/styles/mixins' as *;
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
 
 .form {
-  max-width: 720px;
-  margin: 40px auto;
-  padding: 32px;
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow: 0 10px 40px rgba(0,0,0,.08);
+  @include card;
 
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: $space-lg;
+
+  width: 100%;
+  max-width: 720px;
+
+  margin: $space-xl auto;
 }
 
 .title {
   margin: 0;
-  text-align: center;
-  font-size: 32px;
+
+  font-size: $font-xl;
   font-weight: 700;
+
+  color: $color-primary;
+
+  text-align: center;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+
+  gap: $space-sm;
 }
 
 .label {
-  font-size: 15px;
+  font-size: $font-sm;
   font-weight: 600;
+
+  color: $color-secondary;
 }
 
 .input,
-.select,
-.textarea {
-  width: 100%;
-
-  padding: 14px 18px;
-
-  border: 1px solid #dcdcdc;
-
-  border-radius: 12px;
-
-  font-size: 16px;
-
-  transition: .25s;
-
-  outline: none;
-
-  background: white;
-}
-
-.input:focus,
-.select:focus,
-.textarea:focus {
-  border-color: #4f7cff;
-  box-shadow: 0 0 0 3px rgba(79,124,255,.15);
+.textarea,
+.select {
+  @include input;
 }
 
 .textarea {
   resize: vertical;
-  min-height: 140px;
+
+  min-height: 160px;
 }
 
 .row {
   display: grid;
 
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
 
-  gap: 20px;
+  gap: $space-lg;
 }
 
 .button {
-  cursor: pointer;
+  @include button;
 
-  padding: 16px;
+  background: $color-primary;
+  color: $color-surface;
 
-  border: none;
-
-  border-radius: 12px;
-
-  background: #4f7cff;
-
-  color: white;
-
-  font-size: 17px;
-
+  font-size: $font-md;
   font-weight: 600;
-
-  transition: .25s;
 }
 
-.button:hover {
-  transform: translateY(-2px);
-
-  box-shadow: 0 10px 30px rgba(79,124,255,.25);
+.button:hover:not(:disabled) {
+  background: $color-primary-hover;
 }
 
-.button:active {
-  transform: translateY(0);
+.button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
+.error {
+  color: $color-danger;
+
+  font-size: $font-sm;
+}
+
+@include mobile {
 
   .form {
 
-    margin: 20px;
+    margin: $space-md;
 
-    padding: 24px;
+  }
+
+  .title {
+
+    font-size: $font-lg;
+
   }
 
   .row {
 
     grid-template-columns: 1fr;
+
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @use '@/styles/variables' as *;
+// @use '@/styles/mixins' as *;
+
+// .form {
+//   max-width: 720px;
+//   margin: 40px auto;
+//   padding: 32px;
+//   border-radius: 20px;
+//   background: #ffffff;
+//   box-shadow: 0 10px 40px rgba(0,0,0,.08);
+
+//   display: flex;
+//   flex-direction: column;
+//   gap: 24px;
+// }
+
+// .title {
+//   margin: 0;
+//   text-align: center;
+//   font-size: 32px;
+//   font-weight: 700;
+// }
+
+// .field {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 8px;
+// }
+
+// .label {
+//   font-size: 15px;
+//   font-weight: 600;
+// }
+
+// .input,
+// .select,
+// .textarea {
+//   width: 100%;
+
+//   padding: 14px 18px;
+
+//   border: 1px solid #dcdcdc;
+
+//   border-radius: 12px;
+
+//   font-size: 16px;
+
+//   transition: .25s;
+
+//   outline: none;
+
+//   background: white;
+// }
+
+// .input:focus,
+// .select:focus,
+// .textarea:focus {
+//   border-color: #4f7cff;
+//   box-shadow: 0 0 0 3px rgba(79,124,255,.15);
+// }
+
+// .textarea {
+//   resize: vertical;
+//   min-height: 140px;
+// }
+
+// .row {
+//   display: grid;
+
+//   grid-template-columns: 1fr 1fr;
+
+//   gap: 20px;
+// }
+
+// .button {
+//   cursor: pointer;
+
+//   padding: 16px;
+
+//   border: none;
+
+//   border-radius: 12px;
+
+//   background: #4f7cff;
+
+//   color: white;
+
+//   font-size: 17px;
+
+//   font-weight: 600;
+
+//   transition: .25s;
+// }
+
+// .button:hover {
+//   transform: translateY(-2px);
+
+//   box-shadow: 0 10px 30px rgba(79,124,255,.25);
+// }
+
+// .button:active {
+//   transform: translateY(0);
+// }
+
+// @media (max-width: 768px) {
+
+//   .form {
+
+//     margin: 20px;
+
+//     padding: 24px;
+//   }
+
+//   .row {
+
+//     grid-template-columns: 1fr;
+//   }
+
+// }
