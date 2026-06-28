@@ -66,28 +66,38 @@
 
   border-radius: $radius-md;
 
-  padding: 14px 20px;
+  padding: $space-md $space-lg;
 
   transition: $transition-fast;
+
+  font-weight: 600;
+
 }
 
 @mixin input {
 
   width: 100%;
 
-  padding: 14px 18px;
-
-  border-radius: $radius-md;
+  padding: $space-md;
 
   border: 1px solid $color-border;
 
-  outline: none;
+  border-radius: $radius-md;
+
+  background: $color-surface;
+
+  font-size: $font-md;
 
   transition: $transition-fast;
+
+  outline: none;
 
   &:focus {
 
     border-color: $color-primary;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+
   }
 
 }
