@@ -1,29 +1,25 @@
-'use client';
+"use client";
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import styles from './ProductForm.module.scss';
+import styles from "./ProductForm.module.scss";
 
-import {
-    productSchema,
-    ProductFormData,
-} from './product.schema';
+import { productSchema, ProductFormData } from "./product.schema";
 
 export default function ProductForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<ProductFormData>({
-        resolver: zodResolver(productSchema),
-
-        defaultValues: {
-            status: 'DRAFT',
-            stock: 0,
-        },
-    });
+    defaultValues: {
+      status: "DRAFT",
+      stock: 0,
+    },
+  });
 
   return (
     <form className={styles.form}>
@@ -32,6 +28,7 @@ export default function ProductForm() {
       <div className={styles.field}>
         <label className={styles.label}>Название товара</label>
         <input
+          {...register("name")}
           className={styles.input}
           type="text"
           placeholder="Night Lamp"
@@ -41,6 +38,7 @@ export default function ProductForm() {
       <div className={styles.field}>
         <label className={styles.label}>Slug</label>
         <input
+          {...register("slug")}
           className={styles.input}
           type="text"
           placeholder="night-lamp"
@@ -50,6 +48,7 @@ export default function ProductForm() {
       <div className={styles.field}>
         <label className={styles.label}>Описание</label>
         <textarea
+          {...register("description")}
           className={styles.textarea}
           rows={5}
           placeholder="Описание товара..."
@@ -59,6 +58,7 @@ export default function ProductForm() {
       <div className={styles.field}>
         <label className={styles.label}>URL изображения</label>
         <input
+          {...register("imageUrl")}
           className={styles.input}
           type="url"
           placeholder="https://..."
@@ -69,6 +69,7 @@ export default function ProductForm() {
         <div className={styles.field}>
           <label className={styles.label}>Цена</label>
           <input
+            {...register("price", { valueAsNumber: true })}
             className={styles.input}
             type="number"
             placeholder="50000"
@@ -77,17 +78,24 @@ export default function ProductForm() {
 
         <div className={styles.field}>
           <label className={styles.label}>Количество</label>
+
           <input
+            {...register("stock", { valueAsNumber: true })}
             className={styles.input}
             type="number"
-            placeholder="10"
+            placeholder="100"
           />
+
+          {errors.stock && (
+            <span className={styles.error}>{errors.stock.message}</span>
+          )}
         </div>
       </div>
 
       <div className={styles.field}>
         <label className={styles.label}>SKU</label>
         <input
+          {...register("sku")}
           className={styles.input}
           type="text"
           placeholder="LAMP-001"
@@ -105,10 +113,7 @@ export default function ProductForm() {
         </select>
       </div>
 
-      <button
-        className={styles.button}
-        type="submit"
-      >
+      <button className={styles.button} type="submit">
         Создать товар
       </button>
     </form>
