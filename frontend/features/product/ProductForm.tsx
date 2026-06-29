@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { createProduct } from "./product.api";
+
 import styles from "./ProductForm.module.scss";
 
 import { productSchema, ProductFormData } from "./product.schema";
@@ -11,6 +13,7 @@ export default function ProductForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -20,6 +23,18 @@ export default function ProductForm() {
       stock: 0,
     },
   });
+
+  const onSubmit = async (data: ProductFormData) => {
+    try {
+      const product = await createProduct(data);
+      
+      reset();
+
+      console.log("Создан товар:", product);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <form className={styles.form}>
