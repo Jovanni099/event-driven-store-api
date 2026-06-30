@@ -1,8 +1,7 @@
 import { api } from "@/services/api/api";
-// import { ProductFormData } from "./product.schema";
-import { CreateProductDto } from "./product.types";
+import { ProductFormData } from "./product.schema";
 
-export async function createProduct(data: CreateProductDto) {
+export async function createProduct(data: ProductFormData) {
   const response = await api.post("/products", data);
 
   return response.data;

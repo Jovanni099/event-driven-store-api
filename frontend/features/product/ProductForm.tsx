@@ -27,8 +27,11 @@ export default function ProductForm() {
   const onSubmit = async (data: ProductFormData) => {
     try {
       const product = await createProduct(data);
-      
-      reset();
+
+      reset({
+        status: "DRAFT",
+        stock: 0,
+      });
 
       console.log("Создан товар:", product);
     } catch (error) {
@@ -37,7 +40,7 @@ export default function ProductForm() {
   };
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <h2 className={styles.title}>Создание товара</h2>
 
       <div className={styles.field}>
@@ -48,6 +51,9 @@ export default function ProductForm() {
           type="text"
           placeholder="Night Lamp"
         />
+        {errors.name && (
+          <span className={styles.error}>{errors.name.message}</span>
+        )}
       </div>
 
       <div className={styles.field}>
@@ -58,6 +64,9 @@ export default function ProductForm() {
           type="text"
           placeholder="night-lamp"
         />
+        {errors.slug && (
+          <span className={styles.error}>{errors.slug.message}</span>
+        )}
       </div>
 
       <div className={styles.field}>
@@ -68,6 +77,9 @@ export default function ProductForm() {
           rows={5}
           placeholder="Описание товара..."
         />
+        {errors.description && (
+          <span className={styles.error}>{errors.description.message}</span>
+        )}
       </div>
 
       <div className={styles.field}>
@@ -78,6 +90,9 @@ export default function ProductForm() {
           type="url"
           placeholder="https://..."
         />
+        {errors.imageUrl && (
+          <span className={styles.error}>{errors.imageUrl.message}</span>
+        )}
       </div>
 
       <div className={styles.row}>
@@ -89,6 +104,9 @@ export default function ProductForm() {
             type="number"
             placeholder="50000"
           />
+          {errors.price && (
+            <span className={styles.error}>{errors.price.message}</span>
+          )}
         </div>
 
         <div className={styles.field}>
@@ -115,17 +133,23 @@ export default function ProductForm() {
           type="text"
           placeholder="LAMP-001"
         />
+        {errors.sku && (
+          <span className={styles.error}>{errors.sku.message}</span>
+        )}
       </div>
 
       <div className={styles.field}>
         <label className={styles.label}>Статус</label>
 
-        <select className={styles.select}>
+        <select className={styles.select} {...register("status")}>
           <option value="DRAFT">Черновик</option>
           <option value="ACTIVE">Активный</option>
           <option value="OUT_OF_STOCK">Нет в наличии</option>
           <option value="ARCHIVED">Архив</option>
         </select>
+        {errors.status && (
+          <span className={styles.error}>{errors.status.message}</span>
+        )}
       </div>
 
       <button className={styles.button} type="submit">
