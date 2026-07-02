@@ -14,7 +14,7 @@ export default function ProductForm() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
 
@@ -152,8 +152,8 @@ export default function ProductForm() {
         )}
       </div>
 
-      <button className={styles.button} type="submit">
-        Создать товар
+      <button className={styles.button} type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Создание..." : "Создать товар"}
       </button>
     </form>
   );
