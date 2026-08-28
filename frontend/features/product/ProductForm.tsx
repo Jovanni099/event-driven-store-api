@@ -26,7 +26,11 @@ export default function ProductForm() {
 
   const onSubmit = async (data: ProductFormData) => {
     try {
+        console.log("Отправляем:", data);
+
       const product = await createProduct(data);
+
+      console.log("Ответ:", product);
 
       reset({
         status: "DRAFT",
@@ -35,7 +39,13 @@ export default function ProductForm() {
 
       console.log("Создан товар:", product);
     } catch (error) {
-      console.error(error);
+        
+      console.error("Ошибка Axios:", error);
+
+if (axios.isAxiosError(error)) {
+  console.log(error.response?.status);
+  console.log(error.response?.data);
+}
     }
   };
 

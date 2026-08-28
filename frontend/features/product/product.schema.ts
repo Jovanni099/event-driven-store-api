@@ -18,7 +18,7 @@ export const productSchema = z.object({
 
   sku: z.string().optional(),
 
-  status: z.enum(["DRAFT", "ACTIVE", "OUT_OF_STOCK", "ARCH  IVED"]),
+  status: z.enum(["DRAFT", "ACTIVE", "OUT_OF_STOCK", "ARCHIVED"]),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>;
