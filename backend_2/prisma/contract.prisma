@@ -1,0 +1,9 @@
+// use prisma-8
+
+model Order {
+  id             String   @id @default(uuid())
+  customerEmail  String
+  productName    String
+  quantity       Int
+  createdAt      DateTime @default(now())
+}
