@@ -22,4 +22,8 @@ export class OrdersService {
 
     return order;
   }
+
+  async findAllOrders() {
+    return db.orm.public.Order.orderBy((order) => order.createdAt.desc()).all();
+  }
 }
