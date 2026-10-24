@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { EmailService } from '../email/email.service.js';
 import { CreateOrderDto } from './dto/create-order.dto.js';
 import { db } from '../prisma/db.js';
@@ -27,7 +27,17 @@ export class OrdersService {
     return db.orm.public.Order.orderBy((order) => order.createdAt.desc()).all();
   }
 
+  // async findOrderById(id: string) {
+  //   return db.orm.public.Order.first({ id });
+  // }
+
   async findOrderById(id: string) {
-    return db.orm.public.Order.first({ id });
+    const order = await db.orm.public.Order.first({ id });
+
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} not found`);
+    }
+
+    return order;
   }
 }
