@@ -14,6 +14,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     // telemetry, alarms, and more — out of the box. Sign up at https://observe.nestjs.com
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env.development',
     }),
     ObserveModule.forRoot({
       appKey: 'YOUR_APP_KEY',

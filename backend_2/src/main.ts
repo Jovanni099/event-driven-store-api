@@ -2,8 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule, ObserveInstrument } from './app.module.js';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import { db } from './prisma/db.js';
 
 async function bootstrap() {
+  await db.connect({
+    url: process.env.DATABASE_URL!,
+  });
+
   const app = await NestFactory.create(AppModule, {
     instrument: ObserveInstrument,
   });

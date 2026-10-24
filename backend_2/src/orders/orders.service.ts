@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { EmailService } from '../email/email.service.js';
 import { CreateOrderDto } from './dto/create-order.dto.js';
+import { db } from '../prisma/db.js';
 
 @Injectable()
 export class OrdersService {
   constructor(private readonly emailService: EmailService) {}
 
   async createOrder(dto: CreateOrderDto) {
-    const order = {
-      id: crypto.randomUUID(),
+    const order = await db.orm.public.Order.create({
       customerEmail: dto.customerEmail,
       productName: dto.productName,
       quantity: dto.quantity,
-      createdAt: new Date(),
-    };
+    });
 
     await this.emailService.sendEmail({
       to: order.customerEmail,
