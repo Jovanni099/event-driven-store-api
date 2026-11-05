@@ -1,0 +1,1427 @@
+[
+  {
+    "id": "table.OrderItem",
+    "label": "Create table \"OrderItem\"",
+    "summary": "Creates table \"OrderItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "OrderItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"OrderItem\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderItem\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"OrderItem\"",
+        "sql": "CREATE TABLE \"public\".\"OrderItem\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"lineTotal\" int4,\n  \"orderId\" text NOT NULL,\n  \"productId\" text,\n  \"productName\" text NOT NULL,\n  \"quantity\" int4 NOT NULL,\n  \"sku\" text,\n  \"unitPrice\" int4,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"OrderItem\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderItem\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.OrderStatusHistory",
+    "label": "Create table \"OrderStatusHistory\"",
+    "summary": "Creates table \"OrderStatusHistory\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "OrderStatusHistory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"OrderStatusHistory\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderStatusHistory\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"OrderStatusHistory\"",
+        "sql": "CREATE TABLE \"public\".\"OrderStatusHistory\" (\n  \"changedAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"fromStatus\" text,\n  \"id\" text NOT NULL,\n  \"orderId\" text NOT NULL,\n  \"reason\" text,\n  \"toStatus\" text NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"OrderStatusHistory_fromStatus_check_2e0eb1b3\" CHECK (\"fromStatus\" IN ('PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED')),\n  CONSTRAINT \"OrderStatusHistory_toStatus_check_b4a330f1\" CHECK (\"toStatus\" IN ('PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"OrderStatusHistory\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderStatusHistory\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.customerName",
+    "label": "Add column \"customerName\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "customerName",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"customerName\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "customerName"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"customerName\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"customerName\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"customerName\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "customerName"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.customerPhone",
+    "label": "Add column \"customerPhone\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "customerPhone",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"customerPhone\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "customerPhone"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"customerPhone\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"customerPhone\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"customerPhone\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "customerPhone"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.notes",
+    "label": "Add column \"notes\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "notes",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"notes\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "notes"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"notes\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"notes\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"notes\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "notes"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.orderNumber",
+    "label": "Add column \"orderNumber\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "orderNumber",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"orderNumber\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "orderNumber"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"orderNumber\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"orderNumber\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"orderNumber\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "orderNumber"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.status",
+    "label": "Add column \"status\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "status",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"status\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "status"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"status\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"status\" text DEFAULT 'PENDING' NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"status\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "status"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.subtotalAmount",
+    "label": "Add column \"subtotalAmount\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "subtotalAmount",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"subtotalAmount\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "subtotalAmount"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"subtotalAmount\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"subtotalAmount\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"subtotalAmount\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "subtotalAmount"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.totalAmount",
+    "label": "Add column \"totalAmount\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "totalAmount",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"totalAmount\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "totalAmount"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"totalAmount\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"totalAmount\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"totalAmount\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "totalAmount"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.updatedAt",
+    "label": "Add column \"updatedAt\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "updatedAt",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"updatedAt\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "updatedAt"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"updatedAt\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"updatedAt\" timestamptz DEFAULT (now()) NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"updatedAt\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "updatedAt"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.currency",
+    "label": "Add column \"currency\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "currency",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"currency\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "currency"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"currency\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"currency\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"currency\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "currency"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.backfill-Order-currency",
+    "label": "Data transform: backfill-Order-currency",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [
+      {
+        "description": "Check backfill-Order-currency has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"currency\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run backfill-Order-currency",
+        "sql": "UPDATE \"public\".\"Order\" SET \"currency\" = $1 WHERE \"currency\" IS NULL",
+        "params": [
+          "KZT"
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify backfill-Order-currency resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"currency\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.Order.currency",
+    "label": "Set NOT NULL on \"Order\".\"currency\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "currency",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"currency\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "currency"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"currency\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"Order\" WHERE \"currency\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"currency\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ALTER COLUMN \"currency\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"currency\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "currency",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.discountAmount",
+    "label": "Add column \"discountAmount\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "discountAmount",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"discountAmount\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "discountAmount"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"discountAmount\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"discountAmount\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"discountAmount\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "discountAmount"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.backfill-Order-discountAmount",
+    "label": "Data transform: backfill-Order-discountAmount",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [
+      {
+        "description": "Check backfill-Order-discountAmount has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"discountAmount\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run backfill-Order-discountAmount",
+        "sql": "UPDATE \"public\".\"Order\" SET \"discountAmount\" = $1 WHERE \"discountAmount\" IS NULL",
+        "params": [
+          0
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify backfill-Order-discountAmount resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"discountAmount\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.Order.discountAmount",
+    "label": "Set NOT NULL on \"Order\".\"discountAmount\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "discountAmount",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"discountAmount\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "discountAmount"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"discountAmount\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"Order\" WHERE \"discountAmount\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"discountAmount\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ALTER COLUMN \"discountAmount\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"discountAmount\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "discountAmount",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.shippingAmount",
+    "label": "Add column \"shippingAmount\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "shippingAmount",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"shippingAmount\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "shippingAmount"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"shippingAmount\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"shippingAmount\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"shippingAmount\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "shippingAmount"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.backfill-Order-shippingAmount",
+    "label": "Data transform: backfill-Order-shippingAmount",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [
+      {
+        "description": "Check backfill-Order-shippingAmount has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"shippingAmount\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run backfill-Order-shippingAmount",
+        "sql": "UPDATE \"public\".\"Order\" SET \"shippingAmount\" = $1 WHERE \"shippingAmount\" IS NULL",
+        "params": [
+          0
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify backfill-Order-shippingAmount resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"shippingAmount\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.Order.shippingAmount",
+    "label": "Set NOT NULL on \"Order\".\"shippingAmount\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "shippingAmount",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"shippingAmount\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "shippingAmount"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"shippingAmount\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"Order\" WHERE \"shippingAmount\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"shippingAmount\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ALTER COLUMN \"shippingAmount\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"shippingAmount\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "shippingAmount",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Order.version",
+    "label": "Add column \"version\" to \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "version",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"version\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "version"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"version\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD COLUMN \"version\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"version\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "version"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data_migration.backfill-Order-version",
+    "label": "Data transform: backfill-Order-version",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [
+      {
+        "description": "Check backfill-Order-version has work to do",
+        "sql": "SELECT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"version\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "Run backfill-Order-version",
+        "sql": "UPDATE \"public\".\"Order\" SET \"version\" = $1 WHERE \"version\" IS NULL",
+        "params": [
+          1
+        ]
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "Verify backfill-Order-version resolved all violations",
+        "sql": "SELECT NOT EXISTS (SELECT \"id\" AS \"id\" FROM \"public\".\"Order\" WHERE \"version\" IS NULL LIMIT 1) AS ok",
+        "params": []
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.Order.version",
+    "label": "Set NOT NULL on \"Order\".\"version\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "version",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"version\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "version"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"version\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"Order\" WHERE \"version\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"version\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ALTER COLUMN \"version\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"version\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "version",
+          "NO"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.Order.productName",
+    "label": "Drop NOT NULL on \"Order\".\"productName\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "productName",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"productName\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "productName"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"productName\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ALTER COLUMN \"productName\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"productName\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "productName",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.dropNotNull.Order.quantity",
+    "label": "Drop NOT NULL on \"Order\".\"quantity\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "quantity",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"quantity\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "quantity"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"quantity\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ALTER COLUMN \"quantity\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"quantity\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Order",
+          "quantity",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "checkConstraint.Order.Order_status_check_90625984",
+    "label": "Add check constraint \"Order_status_check_90625984\" on \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "checkConstraint",
+        "name": "Order_status_check_90625984",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Order_status_check_90625984\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Order_status_check_90625984",
+          "public",
+          "\"public\".\"Order\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add check constraint \"Order_status_check_90625984\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD CONSTRAINT \"Order_status_check_90625984\" CHECK (\"status\" IN ('PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'))"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Order_status_check_90625984\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Order_status_check_90625984",
+          "public",
+          "\"public\".\"Order\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Order.Order_orderNumber_key",
+    "label": "Add unique constraint on \"Order\" (orderNumber)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Order_orderNumber_key",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Order_orderNumber_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Order_orderNumber_key",
+          "public",
+          "\"public\".\"Order\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Order_orderNumber_key\"",
+        "sql": "ALTER TABLE \"public\".\"Order\" ADD CONSTRAINT \"Order_orderNumber_key\" UNIQUE (\"orderNumber\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Order_orderNumber_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Order_orderNumber_key",
+          "public",
+          "\"public\".\"Order\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Order.Order_createdAt_idx_9575dbd7",
+    "label": "Create index \"Order_createdAt_idx_9575dbd7\" on \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Order_createdAt_idx_9575dbd7",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Order_createdAt_idx_9575dbd7\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Order_createdAt_idx_9575dbd7\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Order_createdAt_idx_9575dbd7\"",
+        "sql": "CREATE INDEX \"Order_createdAt_idx_9575dbd7\" ON \"public\".\"Order\" (\"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Order_createdAt_idx_9575dbd7\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Order_createdAt_idx_9575dbd7\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Order.Order_customerEmail_createdAt_idx_dc6cefa1",
+    "label": "Create index \"Order_customerEmail_createdAt_idx_dc6cefa1\" on \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Order_customerEmail_createdAt_idx_dc6cefa1",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Order_customerEmail_createdAt_idx_dc6cefa1\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Order_customerEmail_createdAt_idx_dc6cefa1\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Order_customerEmail_createdAt_idx_dc6cefa1\"",
+        "sql": "CREATE INDEX \"Order_customerEmail_createdAt_idx_dc6cefa1\" ON \"public\".\"Order\" (\"customerEmail\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Order_customerEmail_createdAt_idx_dc6cefa1\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Order_customerEmail_createdAt_idx_dc6cefa1\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Order.Order_status_createdAt_idx_58610442",
+    "label": "Create index \"Order_status_createdAt_idx_58610442\" on \"Order\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Order_status_createdAt_idx_58610442",
+        "table": "Order"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Order_status_createdAt_idx_58610442\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Order_status_createdAt_idx_58610442\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Order_status_createdAt_idx_58610442\"",
+        "sql": "CREATE INDEX \"Order_status_createdAt_idx_58610442\" ON \"public\".\"Order\" (\"status\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Order_status_createdAt_idx_58610442\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Order_status_createdAt_idx_58610442\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.OrderItem.OrderItem_orderId_idx_d284871b",
+    "label": "Create index \"OrderItem_orderId_idx_d284871b\" on \"OrderItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "OrderItem_orderId_idx_d284871b",
+        "table": "OrderItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"OrderItem_orderId_idx_d284871b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderItem_orderId_idx_d284871b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"OrderItem_orderId_idx_d284871b\"",
+        "sql": "CREATE INDEX \"OrderItem_orderId_idx_d284871b\" ON \"public\".\"OrderItem\" (\"orderId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"OrderItem_orderId_idx_d284871b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderItem_orderId_idx_d284871b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.OrderItem.OrderItem_productId_idx_5858600a",
+    "label": "Create index \"OrderItem_productId_idx_5858600a\" on \"OrderItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "OrderItem_productId_idx_5858600a",
+        "table": "OrderItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"OrderItem_productId_idx_5858600a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderItem_productId_idx_5858600a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"OrderItem_productId_idx_5858600a\"",
+        "sql": "CREATE INDEX \"OrderItem_productId_idx_5858600a\" ON \"public\".\"OrderItem\" (\"productId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"OrderItem_productId_idx_5858600a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderItem_productId_idx_5858600a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.OrderStatusHistory.OrderStatusHistory_orderId_changedAt_idx_eabbad59",
+    "label": "Create index \"OrderStatusHistory_orderId_changedAt_idx_eabbad59\" on \"OrderStatusHistory\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "OrderStatusHistory_orderId_changedAt_idx_eabbad59",
+        "table": "OrderStatusHistory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"OrderStatusHistory_orderId_changedAt_idx_eabbad59\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderStatusHistory_orderId_changedAt_idx_eabbad59\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"OrderStatusHistory_orderId_changedAt_idx_eabbad59\"",
+        "sql": "CREATE INDEX \"OrderStatusHistory_orderId_changedAt_idx_eabbad59\" ON \"public\".\"OrderStatusHistory\" (\"orderId\", \"changedAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"OrderStatusHistory_orderId_changedAt_idx_eabbad59\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderStatusHistory_orderId_changedAt_idx_eabbad59\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.OrderStatusHistory.OrderStatusHistory_orderId_idx_d284871b",
+    "label": "Create index \"OrderStatusHistory_orderId_idx_d284871b\" on \"OrderStatusHistory\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "OrderStatusHistory_orderId_idx_d284871b",
+        "table": "OrderStatusHistory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"OrderStatusHistory_orderId_idx_d284871b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderStatusHistory_orderId_idx_d284871b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"OrderStatusHistory_orderId_idx_d284871b\"",
+        "sql": "CREATE INDEX \"OrderStatusHistory_orderId_idx_d284871b\" ON \"public\".\"OrderStatusHistory\" (\"orderId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"OrderStatusHistory_orderId_idx_d284871b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"OrderStatusHistory_orderId_idx_d284871b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.OrderItem.OrderItem_orderId_fkey",
+    "label": "Add foreign key \"OrderItem_orderId_fkey\" on \"OrderItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "OrderItem_orderId_fkey",
+        "table": "OrderItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"OrderItem_orderId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "OrderItem_orderId_fkey",
+          "public",
+          "\"public\".\"OrderItem\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"OrderItem_orderId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"OrderItem\"\nADD CONSTRAINT \"OrderItem_orderId_fkey\"\nFOREIGN KEY (\"orderId\")\nREFERENCES \"public\".\"Order\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"OrderItem_orderId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "OrderItem_orderId_fkey",
+          "public",
+          "\"public\".\"OrderItem\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.OrderStatusHistory.OrderStatusHistory_orderId_fkey",
+    "label": "Add foreign key \"OrderStatusHistory_orderId_fkey\" on \"OrderStatusHistory\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "OrderStatusHistory_orderId_fkey",
+        "table": "OrderStatusHistory"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"OrderStatusHistory_orderId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "OrderStatusHistory_orderId_fkey",
+          "public",
+          "\"public\".\"OrderStatusHistory\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"OrderStatusHistory_orderId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"OrderStatusHistory\"\nADD CONSTRAINT \"OrderStatusHistory_orderId_fkey\"\nFOREIGN KEY (\"orderId\")\nREFERENCES \"public\".\"Order\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"OrderStatusHistory_orderId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "OrderStatusHistory_orderId_fkey",
+          "public",
+          "\"public\".\"OrderStatusHistory\""
+        ]
+      }
+    ]
+  }
+]

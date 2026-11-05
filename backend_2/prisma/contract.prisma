@@ -1,9 +1,87 @@
 // use prisma-8
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model Order {
-  id             String   @id @default(uuid())
-  customerEmail  String
-  productName    String
-  quantity       Int
-  createdAt      DateTime @default(now())
+  id              String      @id @default(uuid())
+  orderNumber     String?     @unique
+
+  customerEmail   String
+  customerName    String?
+  customerPhone   String?
+
+  status          OrderStatus @default(PENDING)
+
+  // Денежные суммы в минимальных единицах валюты
+  subtotalAmount  Int?
+  shippingAmount Int    
+  discountAmount Int  
+  totalAmount     Int?
+  currency        String
+
+  // Старые поля временно сохраняем
+  // до переноса существующих заказов в OrderItem
+  productName     String?
+  quantity        Int?
+
+  notes           String?
+
+  items           OrderItem[]
+  statusHistory   OrderStatusHistory[]
+
+  version         Int   
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @default(now())
+
+  @@index([customerEmail, createdAt])
+  @@index([status, createdAt])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id          String   @id @default(uuid())
+  orderId     String
+
+  // Ссылка на товар каталога.
+  // FK добавим, когда согласуем модель Product.
+  productId   String?
+  productName String
+  sku         String?
+
+  quantity    Int
+
+  // Nullable для переноса старых заказов,
+  // у которых историческая цена неизвестна.
+  unitPrice   Int?
+  lineTotal   Int?
+
+  createdAt   DateTime @default(now())
+
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model OrderStatusHistory {
+  id          String      @id @default(uuid())
+  orderId     String
+
+  fromStatus  OrderStatus?
+  toStatus    OrderStatus
+
+  reason      String?
+  changedAt   DateTime    @default(now())
+
+  order       Order       @relation(fields: [orderId], references: [id], onDelete: Restrict)
+
+  @@index([orderId, changedAt])
 }
