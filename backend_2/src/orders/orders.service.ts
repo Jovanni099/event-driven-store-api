@@ -10,9 +10,19 @@ export class OrdersService {
   async createOrder(dto: CreateOrderDto) {
     const order = await db.orm.public.Order.create({
       customerEmail: dto.customerEmail,
-      productName: dto.productName,
-      quantity: dto.quantity,
+      shippingAmount: 0,
+      discountAmount: 0,
+      currency: 'KZT',
+      version: 1,
     });
+
+    for (const item of dto.items) {
+      await db.orm.public.OrderItem.create({
+        orderId: order.id,
+        productName: item.productName,
+        quantity: item.quantity,
+      });
+    }
 
     await this.emailService.sendEmail({
       to: order.customerEmail,
@@ -20,7 +30,7 @@ export class OrdersService {
       text: `Your order ${order.id} has been created.`,
     });
 
-    return order;
+    return db.orm.public.Order.where({ id: order.id }).include('items').first();
   }
 
   async findAllOrders() {

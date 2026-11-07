@@ -1,14 +1,22 @@
-import { IsEmail, IsInt, IsString, Min, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsString,
+  MinLength,
+  ValidateNested,
+  ArrayMinSize,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+import { CreateOrderItemDto } from './create-order-item.dto.js';
 
 export class CreateOrderDto {
   @IsEmail()
   customerEmail: string;
 
-  @IsString()
-  @MinLength(2)
-  productName: string;
-
-  @IsInt()
-  @Min(1)
-  quantity: number;
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => CreateOrderItemDto)
+  items: CreateOrderItemDto[];
 }
