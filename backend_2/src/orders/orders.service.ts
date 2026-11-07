@@ -42,7 +42,9 @@ export class OrdersService {
   // }
 
   async findOrderById(id: string) {
-    const order = await db.orm.public.Order.first({ id });
+    const order = await db.orm.public.Order.where({ id })
+      .include('items')
+      .first();
 
     if (!order) {
       throw new NotFoundException(`Order with id ${id} not found`);
