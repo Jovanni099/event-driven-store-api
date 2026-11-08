@@ -53,6 +53,7 @@ model OrderItem {
   // Ссылка на товар каталога.
   // FK добавим, когда согласуем модель Product.
   productId   String?
+  product     Product? @relation(fields: [productId], references: [id], onDelete: Restrict)
   productName String
   sku         String?
 
@@ -85,3 +86,36 @@ model OrderStatusHistory {
 
   @@index([orderId, changedAt])
 }
+
+enum ProductStatus {
+  DRAFT
+  PENDING_REVIEW
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+  ARCHIVED
+}
+
+model Product {
+  id          String        @id @default(uuid())
+  name        String
+  slug        String        @unique
+  description String?
+  imageUrl    String?
+  sku         String?       @unique
+
+  // Цена в минимальных единицах валюты
+  price       Int
+
+  stock       Int           @default(0)
+  status      ProductStatus @default(DRAFT)
+
+  orderItems  OrderItem[]
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now())
+
+  @@index([status, createdAt])
+  @@index([name])
+}
+
