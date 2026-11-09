@@ -5,6 +5,7 @@ import { AppService } from './app.service.js';
 
 import { ConfigModule } from '@nestjs/config';
 import { OrdersModule } from './orders/orders.module.js';
+import { ProductsModule } from './products/products.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -22,6 +23,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       serviceId: 'backend_2',
     }),
     OrdersModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
