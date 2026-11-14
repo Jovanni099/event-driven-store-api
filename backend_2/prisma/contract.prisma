@@ -10,7 +10,7 @@ enum OrderStatus {
 }
 
 model Order {
-  id              String      @id @default(uuid())
+  id String @id @onCreate(uuid())
   orderNumber     String?     @unique
 
   customerEmail   String
@@ -47,7 +47,7 @@ model Order {
 }
 
 model OrderItem {
-  id          String   @id @default(uuid())
+  id String @id @onCreate(uuid())
   orderId     String
 
   // Ссылка на товар каталога.
@@ -73,7 +73,7 @@ model OrderItem {
 }
 
 model OrderStatusHistory {
-  id          String      @id @default(uuid())
+  id String @id @onCreate(uuid())
   orderId     String
 
   fromStatus  OrderStatus?
@@ -97,7 +97,7 @@ enum ProductStatus {
 }
 
 model Product {
-  id          String        @id @default(uuid())
+  id String @id @onCreate(uuid())
   name        String
   slug        String        @unique
   description String?
